@@ -273,111 +273,126 @@ public class Main { // Класс Тестер
 }
 ```
 Задание 2(Структура данных - Кольцевой Список)
+Файл LinkedList
 ```
+package com.mycompany.list2;
+
+class LinkedList {
+    private Student head;
+
+    public LinkedList() {
+        this.head = null;
+    }
+
+    // Метод добавления студента
+    public void addStudent() {
+        Student newStudent = new Student();
+        newStudent.inputAttributes(); 
+        if (head == null) {
+            head = newStudent; 
+        } else {
+            Student current = head;
+            while (current.next != null) { 
+                current = current.next;
+            }
+            current.next = newStudent; 
+            newStudent.prev = current; 
+        }
+    }
+
+    public void displayStudents() {
+        if (head == null) {
+            System.out.println("No students in the list.");
+            return;
+        }
+        Student current = head;
+        while (current != null) {
+            current.displayAttributes(); 
+            current = current.next; 
+        }
+    }
+}
+```
+файл Student
+```
+package com.mycompany.list2;
+
 import java.util.Scanner;
 
-class Node {
-    private String name;
-    private int age;
-    Node next; // Указатель на следующий узел
+class Student {
+    String name;
+    int age;
+    String group;
+    String performance;
+    Student prev;
+    Student next;
 
-    public Node(String name, int age) {
-        this.name = name;
-        this.age = age;
+    public Student() {
+        this.name = null;
+        this.age = 0;
+        this.group = null;
+        this.performance = null;
+        this.prev = null;
+        this.next = null;
     }
 
     public void inputAttributes() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Введите имя: ");
+        System.out.print("Enter student's name: ");
         this.name = scanner.nextLine();
-        System.out.print("Введите возраст: ");
+        System.out.print("Enter student's age: ");
         this.age = scanner.nextInt();
         scanner.nextLine(); 
+        System.out.print("Enter student's group: ");
+        this.group = scanner.nextLine();
+        System.out.print("Enter performance (Excelent/Good/Bad/Very Bad): ");
+        this.performance = scanner.nextLine();
     }
 
     public void displayAttributes() {
-        System.out.println("Имя: " + name);
-        System.out.println("Возраст: " + age);
-    }
-
-    public String getName() {
-        return name;
-    }
-}
-
-class CL {
-    private Node head;
-    private Node tail;
-
-    public void addNode(Node node) {
-        if (head == null) {
-            head = node;
-            tail = node;
-            tail.next = head; 
-        } else {
-            tail.next = node; 
-            tail = node; 
-            tail.next = head; 
-        }
-    }
-
-    public void displayList() {
-        if (head == null) {
-            System.out.println("Список пуст.");
-            return;
-        }
-        Node current = head;
-        do {
-            current.displayAttributes();
-            System.out.println("-----------------------");
-            current = current.next;
-        } while (current != head);
-    }
-
-    public boolean isEmpty() {
-        return head == null;
+        System.out.println(
+            "Name: " + this.name +
+            ", Age: " + this.age +
+            ", Group: " + this.group +
+            ", Performance: " + this.performance
+        );
     }
 }
+```
+Основной файл с (main):
+```
+package com.mycompany.list2;
 
-public class Main {
+import java.util.Scanner;
+
+public class List2 {
     public static void main(String[] args) {
+        LinkedList studentList = new LinkedList();
         Scanner scanner = new Scanner(System.in);
-        CL list = new CL();
-        int x;
 
-        do {
-            System.out.println("\nМеню:");
-            System.out.println("1. Добавить элемент");
-            System.out.println("2. Показать картотеку");
-            System.out.println("3. Проверить, пуст ли список");
-            System.out.println("0. Выход");
-            System.out.print("Ваш выбор: ");
-            x = scanner.nextInt();
-            scanner.nextLine();
+        while (true) {
+            System.out.println("1. Add Student");
+            System.out.println("2. Print All Students");
+            System.out.println("3. Quit");
+            System.out.print("Choose variant of action: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Очистка буфера после ввода числа
 
-            switch (x) {
-                case 1:
-                    Node newNode = new Node("", 0);
-                    newNode.inputAttributes();
-                    list.addNode(newNode);
-                    System.out.println("Элемент добавлен.");
-                    break;
-                case 2:
-                    System.out.println("Картотека:");
-                    list.displayList();
-                    break;
-                case 3:
-                    System.out.println("Список " + (list.isEmpty() ? "пуст." : "не пуст."));
-                    break;
-                case 0:
-                    System.out.println("Выход из программы...");
-                    break;
-                default:
-                    System.out.println("Неверный выбор. Попробуйте снова.");
+            switch (choice) {
+                case 1 -> {
+                    studentList.addStudent(); 
+                }
+                case 2 -> {
+                    studentList.displayStudents(); 
+                }
+                case 3 -> {
+                    System.out.println("Exiting program...");
+                    scanner.close();
+                    return; // Завершение программы
+                }
+                default -> System.out.println("Invalid option. Try again.");
             }
-        } while (x != 0);
-
-        scanner.close();
+        }
     }
 }
 ```
